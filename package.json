@@ -1,0 +1,8 @@
+{
+  "name": "mercado-pago-terminal-vercel",
+  "version": "1.0.0",
+  "description": "Terminal de Pagos con Vercel Serverless",
+  "scripts": {
+    "dev": "vercel dev"
+  }
+}

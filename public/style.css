@@ -1,0 +1,467 @@
+:root {
+  /* DARK THEME COLORS */
+  --bg-color: #0b0d12;
+  --card-bg: rgba(26, 29, 36, 0.4);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+  --input-bg: rgba(15, 17, 21, 0.5);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --success-color: #10b981;
+
+  /* LIGHT THEME COLORS */
+  --light-card-bg: #ffffff;
+  --light-text-primary: #333333;
+  --light-text-secondary: #666666;
+  --light-input-bg: #ffffff;
+  --light-input-border: #cccccc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 40%);
+  animation: bgGlow 15s ease infinite alternate;
+  transition: background-color 0.5s ease;
+}
+
+body.light-mode-active {
+  background-color: #f5f5f5;
+  background-image: none;
+}
+
+@keyframes bgGlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.app-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  transition: max-width 0.3s ease;
+}
+
+/* ---------------------------------
+   DARK CARD (STEP 1 & SUCCESS)
+--------------------------------- */
+.payment-card {
+  position: relative;
+  background: var(--card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+  overflow: hidden;
+  color: var(--text-primary);
+}
+
+.payment-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+.payment-card .title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.payment-card .subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+/* Inputs Dark */
+.payment-card input, .payment-card .secure-field {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  height: 52px;
+}
+
+.payment-card .secure-field {
+  padding: 0;
+  padding: 0.875rem 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.payment-card input:focus, .payment-card .secure-field.mp-focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  background: rgba(15, 17, 21, 0.8);
+}
+
+.payment-card .input-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+.payment-card .input-group label svg {
+  color: var(--accent-color);
+  opacity: 0.8;
+}
+
+.glow-effect {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--accent-color), #2563eb);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1.1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+.glow-effect:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -10px rgba(59, 130, 246, 0.6);
+}
+
+/* Back Button Dark Theme */
+.btn-back {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+.btn-back:active {
+  transform: translateX(-1px) scale(0.95);
+}
+
+
+/* ---------------------------------
+   LIGHT CARD (STEP 2)
+--------------------------------- */
+body.light-mode-active {
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+  animation: bgGlowLight 15s ease infinite alternate;
+}
+
+@keyframes bgGlowLight {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.light-card {
+  background: var(--light-card-bg);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.15), 0 0 0 1px rgba(0,0,0,0.02);
+  color: var(--light-text-primary);
+  backdrop-filter: none;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+.light-card::before { display: none; }
+
+/* Add a very subtle color bar at the top of the white card */
+.light-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color), #8b5cf6, var(--success-color));
+}
+
+.light-card .header-top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.light-card .title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.light-card .subtitle {
+  color: var(--light-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  margin-left: 2.5rem; /* Aligns with text after back button */
+}
+
+.light-card .input-group label {
+  font-size: 0.9rem;
+  color: #475569;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+}
+.light-card .input-group label svg {
+  color: var(--accent-color);
+}
+.light-card .label-subtitle {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: normal;
+}
+
+.light-card input, .light-card .secure-field {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: var(--light-text-primary);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  height: 52px;
+}
+.light-card .secure-field {
+  padding: 0;
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.light-card input:focus, .light-card .secure-field.mp-focus {
+  border-color: var(--accent-color);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.light-card .btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--accent-color), #2563eb);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1.1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+.light-card .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* Light Card Header Brands */
+.card-brands-header { margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; margin-left: 2.5rem; }
+.card-brands-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+.brands-icons { display: flex; gap: 0.5rem; }
+.brand-box {
+  height: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0 0.5rem;
+  background: #ffffff;
+}
+.brand-box.visa { color: #1a1f71; }
+.brand-box.amex { color: #2e77bc; background: #f0f7ff; border-color: #bfdbfe; }
+.brand-box.mastercard { position: relative; width: 38px; }
+.brand-box.mastercard .circle { width: 14px; height: 14px; border-radius: 50%; position: absolute; }
+.brand-box.mastercard .red { background: #eb001b; left: 6px; z-index: 1;}
+.brand-box.mastercard .orange { background: #f79e1b; left: 16px; opacity: 0.9;}
+
+/* Common Helpers */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+.form-row > * { flex: 1; }
+.input-group {
+  margin-bottom: 1.2rem;
+}
+.secure-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cvv-icon {
+  position: absolute;
+  right: 1rem;
+  pointer-events: none;
+}
+.cvv-icon svg {
+  stroke: var(--accent-color);
+  opacity: 0.6;
+}
+.hidden { display: none !important; }
+
+/* Visual Graphic in Step 1 */
+.card-visual-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+.virtual-card {
+  width: 220px;
+  height: 140px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  position: relative;
+  box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.card-chip {
+  width: 35px; height: 25px;
+  background: linear-gradient(135deg, #eab308, #ca8a04);
+  border-radius: 4px;
+}
+.card-wifi {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.btn-back-light {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+.btn-back-light:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+  transform: scale(1.05);
+}
+
+/* Success screen */
+.success-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.success-icon {
+  color: var(--success-color);
+  margin-bottom: 1.5rem;
+  animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes scaleIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+}
+@media (max-width: 480px) {
+  .app-container.mobile-flush {
+    padding: 0; 
+  }
+  .payment-card.light-card {
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100vh;
+    padding: 1.5rem 1rem;
+  }
+}
