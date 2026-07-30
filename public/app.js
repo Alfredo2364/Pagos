@@ -151,12 +151,20 @@ checkoutForm.addEventListener('submit', async (e) => {
         if (neighborhood) payerObj.address.neighborhood = neighborhood;
       }
 
+      // Asegurar que device_id sea un string
+      let deviceId = null;
+      if (typeof window.mpDeviceId === 'string') {
+        deviceId = window.mpDeviceId;
+      } else if (document.getElementById('mpDeviceId')) {
+        deviceId = document.getElementById('mpDeviceId').value;
+      }
+
       const payload = {
         token: tokenResponse.id,
         transaction_amount: transactionData.amount,
         description: transactionData.description,
         payment_method_id: window.paymentMethodId || 'master', 
-        device_id: window.mpDeviceId || null,
+        device_id: deviceId,
         installments: 1,
         payer: payerObj
       };
