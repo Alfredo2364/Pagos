@@ -118,6 +118,30 @@ checkoutForm.addEventListener('submit', async (e) => {
     });
 
     if (tokenResponse && tokenResponse.id) {
+      let payerObj = {
+        first_name: document.getElementById('buyerName').value || transactionData.cardholderName,
+        email: document.getElementById('buyerEmail').value || transactionData.payerEmail
+      };
+
+      const lastName = document.getElementById('buyerLastName').value;
+      if (lastName) payerObj.last_name = lastName;
+
+      const phone = document.getElementById('buyerPhone').value;
+      if (phone) payerObj.phone = { number: phone };
+
+      const street = document.getElementById('buyerStreet').value;
+      const streetNumber = document.getElementById('buyerNumber').value;
+      const zipCode = document.getElementById('buyerZip').value;
+      const neighborhood = document.getElementById('buyerSuburb').value;
+
+      if (street || streetNumber || zipCode || neighborhood) {
+        payerObj.address = {};
+        if (street) payerObj.address.street_name = street;
+        if (streetNumber) payerObj.address.street_number = streetNumber;
+        if (zipCode) payerObj.address.zip_code = zipCode;
+        if (neighborhood) payerObj.address.neighborhood = neighborhood;
+      }
+
       const payload = {
         token: tokenResponse.id,
         transaction_amount: transactionData.amount,
@@ -125,20 +149,7 @@ checkoutForm.addEventListener('submit', async (e) => {
         payment_method_id: window.paymentMethodId || 'master', 
         device_id: window.mpDeviceId || null,
         installments: 1,
-        payer: {
-          first_name: document.getElementById('buyerName').value || transactionData.cardholderName,
-          last_name: document.getElementById('buyerLastName').value || '',
-          email: document.getElementById('buyerEmail').value || transactionData.payerEmail,
-          phone: document.getElementById('buyerPhone').value ? { number: document.getElementById('buyerPhone').value } : undefined,
-          address: {
-            street_name: document.getElementById('buyerStreet').value || '',
-            street_number: document.getElementById('buyerNumber').value || '',
-            zip_code: document.getElementById('buyerZip').value || '',
-            city: document.getElementById('buyerCity').value || '',
-            state: document.getElementById('buyerState').value || '',
-            neighborhood: document.getElementById('buyerSuburb').value || ''
-          }
-        }
+        payer: payerObj
       };
 
       // Muestra vista de procesando
