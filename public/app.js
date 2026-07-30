@@ -118,6 +118,15 @@ checkoutForm.addEventListener('submit', async (e) => {
     });
 
     if (tokenResponse && tokenResponse.id) {
+      
+      // Fallback inteligente en caso de que Mercado Pago tire error 503 en Sandbox
+      if (!window.paymentMethodId && tokenResponse.first_six_digits) {
+        const firstDigit = tokenResponse.first_six_digits.charAt(0);
+        if (firstDigit === '4') window.paymentMethodId = 'visa';
+        else if (firstDigit === '5') window.paymentMethodId = 'master';
+        else if (firstDigit === '3') window.paymentMethodId = 'amex';
+      }
+
       let payerObj = {
         first_name: document.getElementById('buyerName').value || transactionData.cardholderName,
         email: document.getElementById('buyerEmail').value || transactionData.payerEmail
