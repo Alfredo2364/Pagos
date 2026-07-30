@@ -16,10 +16,7 @@ export default async function handler(req, res) {
       payment_method_id: data.payment_method_id,
       token: data.token,
       installments: Number(data.installments),
-      payer: {
-        email: data.payer.email,
-        first_name: data.payer.first_name
-      }
+      payer: data.payer // Pasamos el objeto entero (con todo y address, si existe)
     };
 
     const idempotencyKey = Date.now().toString() + Math.random().toString(36).substring(7);
