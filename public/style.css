@@ -447,21 +447,41 @@ body.light-mode-active {
 .btn-secondary:hover {
   background: rgba(255,255,255,0.05);
 }
-
-@media (max-width: 640px) {
+/* RESPONSIVE DESIGN - Mobile, Tablet, PC */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+  .payment-card, .light-card {
+    padding: 2rem;
+    border-radius: 18px;
+  }
   .form-row {
     flex-direction: column;
     gap: 1.2rem;
   }
 }
+
 @media (max-width: 480px) {
-  .app-container.mobile-flush {
-    padding: 0; 
+  .app-container {
+    padding: 0.5rem;
   }
-  .payment-card.light-card {
-    border-radius: 0;
-    box-shadow: none;
-    min-height: 100vh;
-    padding: 1.5rem 1rem;
+  .payment-card, .light-card {
+    padding: 1.2rem;
+    border-radius: 12px;
+  }
+  .payment-card .title {
+    font-size: 1.3rem;
+  }
+  .light-card .title {
+    font-size: 1.1rem;
+  }
+  .payment-card input, .light-card input, .secure-field {
+    font-size: 16px; /* Prevents iOS auto-zoom */
+    padding: 0.7rem 0.8rem;
+  }
+  .btn-primary {
+    padding: 1rem;
   }
 }
