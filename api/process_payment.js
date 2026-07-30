@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   }
 
   // Las llaves de Producción (APP_USR-...)
-  const ACCESS_TOKEN = "TEST-6908464751548496-072922-edd0ed427c6246bce93cd765737b940e-3097792026";
+  const ACCESS_TOKEN = "APP_USR-6908464751548496-072922-a3f96a68e62f331c1e9f890679040d99-3097792026";
 
   try {
     const data = req.body;
