@@ -83,7 +83,9 @@ function initSecureFields() {
     try {
       if (bin) {
         const { results } = await mp.getPaymentMethods({ bin });
-        window.paymentMethodId = results[0].id;
+        console.log('Resultados de getPaymentMethods:', results);
+        if (!results || results.length === 0) return;
+        window.paymentMethodId = results[0]?.id;
       }
     } catch (e) {
       console.error('Error getting payment method', e);
