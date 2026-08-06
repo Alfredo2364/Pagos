@@ -107,8 +107,8 @@ adminForm.addEventListener('submit', async (e) => {
     });
     const data = await res.json().catch(() => ({}));
     if (res.ok) {
-      alert('¡Credenciales actualizadas correctamente!');
-      adminForm.reset();
+      alert('¡Credenciales actualizadas correctamente! El sistema se reiniciará para aplicarlas.');
+      window.location.reload();
     } else {
       alert('Error al guardar credenciales. Detalles: ' + (data.details || data.error || data.message || res.statusText));
     }
