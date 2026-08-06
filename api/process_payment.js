@@ -1,11 +1,21 @@
+import fs from 'fs';
+import path from 'path';
+
 export default async function handler(req, res) {
   // Solo permitir POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  // Las llaves de Producción (APP_USR-...)
-  const ACCESS_TOKEN = "APP_USR-16428924137717-073114-4eadb7b2105102a5d20cc7a9787bda73-730654234";
+  // Leer llaves
+  let ACCESS_TOKEN = '';
+  try {
+    const keysData = fs.readFileSync(path.join(process.cwd(), 'api', 'keys.json'), 'utf8');
+    ACCESS_TOKEN = JSON.parse(keysData).accessToken;
+  } catch (error) {
+    console.error('Error reading keys:', error);
+    return res.status(500).json({ error: 'Error interno de configuración' });
+  }
 
   try {
     const data = req.body;

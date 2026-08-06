@@ -6,253 +6,251 @@
   <title>Terminal Virtual</title>
   
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <script src="https://sdk.mercadopago.com/js/v2"></script>
   <script src="https://www.mercadopago.com/v2/security.js" view="checkout" output="mpDeviceId"></script>
 </head>
 <body>
   
-  <!-- Encabezado Morado -->
-  <header class="navbar">
+  <!-- Encabezado Morado / Premium -->
+  <header class="navbar" id="main-header" style="display: none;">
     <div class="nav-content">
-      <div class="nav-logo">Terminal Virtual</div>
+      <div class="nav-logo">Terminal <span class="highlight">Virtual</span></div>
       <div class="nav-links">
-        <a href="#" class="nav-link">Cobros con tarjeta tokenizada</a>
-        <a href="#" class="nav-link">Historial</a>
+        <span id="user-role-badge" class="badge">Role</span>
+        <a href="#" id="btn-logout" class="nav-link logout-link">Cerrar Sesión</a>
       </div>
     </div>
   </header>
 
   <div class="app-container" id="app-container">
-    
-    <!-- PANTALLA 1: INICIO -->
-    <div id="step-1-container" class="view-container active">
-      <div class="split-layout">
-        <!-- Columna Izquierda -->
-        <div class="hero-section">
-          <p class="hero-subtitle">TERMINAL DE PUNTO DE VENTA</p>
-          <h1 class="hero-title">Cobra con tarjeta de<br>forma segura.</h1>
-        </div>
-        
-        <!-- Columna Derecha -->
-        <div class="form-section">
-          <div class="white-card">
-            <form id="details-form">
-              <div class="input-group">
-                <label for="description">Descripción</label>
-                <input type="text" id="description" required placeholder="Ej. Pago de servicio">
-              </div>
-              
-              <div class="row">
-                <div class="input-group flex-2">
-                  <label for="amount">Monto</label>
-                  <input type="number" id="amount" required placeholder="100.00" min="1" step="0.01">
-                </div>
-                <div class="input-group flex-1">
-                  <label for="currency">Moneda</label>
-                  <select id="currency" disabled>
-                    <option value="MXN">MXN</option>
-                  </select>
-                </div>
-              </div>
-              
-              <button type="submit" class="btn-primary">Continuar a tarjeta</button>
-            </form>
+
+    <!-- ==================== LOGIN VIEW ==================== -->
+    <div id="login-view" class="view-container active">
+      <div class="login-wrapper">
+        <div class="glass-card login-card">
+          <div class="logo-area">
+            <div class="logo-icon"></div>
+            <h2>Bienvenido</h2>
+            <p>Ingresa tus credenciales para continuar</p>
+          </div>
+          <form id="login-form">
+            <div class="input-group">
+              <label for="username">Usuario</label>
+              <input type="text" id="username" required placeholder="cliente / admin">
+            </div>
+            <div class="input-group">
+              <label for="password">Contraseña</label>
+              <input type="password" id="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn-primary glow-button">Iniciar Sesión</button>
+          </form>
+          <div class="login-hints">
+            <small>Hint: cliente/1234 | admin/admin</small>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PANTALLA 2: FORMULARIO DE PAGO Y DATOS DEL COMPRADOR -->
-    <div id="step-2-container" class="view-container">
-      <button type="button" id="btn-back-to-1" class="btn-link">← Volver</button>
-      
+    <!-- ==================== ADMIN VIEW ==================== -->
+    <div id="admin-view" class="view-container">
       <div class="centered-layout">
-        <div class="white-card lg-card">
-          <div class="card-header-info">
-            <span class="info-label">PAGO CON TARJETA</span>
-            <h3 class="info-desc" id="display-desc">pagos</h3>
-            <div class="info-amount">
-              <span class="flag">🇲🇽</span> <span id="display-amount">$10.00</span>
-            </div>
+        <div class="glass-card lg-card">
+          <div class="card-header">
+            <h3><span class="icon">⚙️</span> Panel de Configuración Admin</h3>
+            <p>Modifica las credenciales de Mercado Pago del sistema</p>
           </div>
-          
           <hr class="divider">
           
-          <p class="section-title">Datos de la tarjeta</p>
-          <p class="subsection-title">Tarjeta de crédito o débito</p>
-          <div class="card-brands">
-            <span class="brand visa">VISA</span>
-            <span class="brand mc"><div class="circle red"></div><div class="circle orange"></div></span>
-            <span class="brand amex">AMEX</span>
-          </div>
-
-          <form id="checkout-form" class="checkout-form">
+          <form id="admin-form">
             <div class="input-group">
-              <label>Número de tarjeta</label>
-              <div id="cardNumber" class="secure-field"></div>
+              <label for="admin-public-key">Public Key (APP_USR-...)</label>
+              <input type="text" id="admin-public-key" required placeholder="APP_USR-xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
             </div>
-            
-            <div class="row">
-              <div class="input-group flex-1">
-                <label>Vencimiento</label>
-                <div id="expirationDate" class="secure-field"></div>
-              </div>
-              <div class="input-group flex-1">
-                <label>Código de seguridad</label>
-                <div class="secure-wrapper">
-                  <div id="securityCode" class="secure-field"></div>
-                  <div class="cvv-icon">💳</div>
-                </div>
-              </div>
-            </div>
-
             <div class="input-group">
-              <label for="cardholderName">Nombre del titular como aparece en la tarjeta</label>
-              <input type="text" id="cardholderName" required placeholder="María López">
+              <label for="admin-access-token">Access Token (APP_USR-...)</label>
+              <input type="password" id="admin-access-token" required placeholder="APP_USR-xxxxxx-xxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-xxxxxxxxx">
             </div>
-            
-            <div class="input-group">
-              <label for="payerEmail">Completa tu información <br><span class="label-muted">E-mail</span></label>
-              <input type="email" id="payerEmail" required placeholder="ejemplo@email.com">
-            </div>
-
-            <button type="submit" id="btn-pay" class="btn-primary" style="background: #3b82f6;">
-              <span class="lock-icon">🔒</span> Pagar
-            </button>
-
-            <hr class="divider">
-
-            <p class="section-title">Datos del comprador</p>
-            
-            <div class="row">
-              <div class="input-group flex-1">
-                <input type="text" id="buyerName" placeholder="Nombre (Opcional)">
-              </div>
-              <div class="input-group flex-1">
-                <input type="text" id="buyerLastName" placeholder="Apellido (Opcional)">
-              </div>
-            </div>
-            
-            <div class="input-group">
-              <input type="email" id="buyerEmail" placeholder="Correo electrónico (Opcional)">
-            </div>
-            
-            <div class="input-group">
-              <input type="tel" id="buyerPhone" placeholder="Teléfono (Opcional)">
-            </div>
-            
-            <div class="row">
-              <div class="input-group flex-2">
-                <input type="text" id="buyerStreet" placeholder="Calle (Opcional)">
-              </div>
-              <div class="input-group flex-1">
-                <input type="text" id="buyerNumber" placeholder="Número (Opcional)">
-              </div>
-            </div>
-            
-            <div class="input-group">
-              <input type="text" id="buyerSuburb" placeholder="Colonia (Opcional)">
-            </div>
-            
-            <div class="row">
-              <div class="input-group flex-1">
-                <input type="text" id="buyerCity" placeholder="Ciudad (Opcional)">
-              </div>
-              <div class="input-group flex-1">
-                <input type="text" id="buyerState" placeholder="Estado (Opcional)">
-              </div>
-            </div>
-            
-            <div class="input-group">
-              <input type="text" id="buyerZip" placeholder="Código postal (Opcional)">
-            </div>
-            
-            <p class="secure-footer"><span class="lock-icon">🔒</span> Pago seguro encriptado.</p>
+            <button type="submit" id="btn-save-keys" class="btn-primary glow-button">Guardar Cambios</button>
           </form>
         </div>
       </div>
     </div>
 
-    <!-- PANTALLA 3: PAGO EN PROCESO -->
-    <div id="step-3-container" class="view-container">
-      <button type="button" id="btn-back-to-1-from-3" class="btn-link">← Volver</button>
-      <div class="centered-layout">
-        <div class="white-card md-card text-center" style="padding: 4rem 2rem;">
-          <div class="processing-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <h2 class="processing-title">Pago en proceso</h2>
-          <p class="processing-desc">Tu pago está siendo procesado. Te notificaremos cuando se complete.</p>
-          <button type="button" id="btn-view-details" class="btn-text">Ver detalle del cobro</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- PANTALLA 4: DETALLE DEL COBRO -->
-    <div id="step-4-container" class="view-container">
-      <button type="button" id="btn-back-to-1-from-4" class="btn-link">← Volver a cobros</button>
+    <!-- ==================== CLIENT VIEWS (TERMINAL) ==================== -->
+    <div id="client-view" class="view-container">
       
-      <div class="details-layout">
-        <!-- Tarjeta Izquierda (Detalles) -->
-        <div class="white-card flex-2">
-          <p class="info-label">DETALLE DEL COBRO</p>
-          <h3 class="info-desc" id="detail-desc">pagos</h3>
-          <div class="info-amount">
-            <span class="flag">🇲🇽</span> <span id="detail-amount">$10.00</span>
+      <!-- PANTALLA 1: INICIO -->
+      <div id="step-1-container" class="terminal-step active">
+        <div class="split-layout">
+          <!-- Columna Izquierda -->
+          <div class="hero-section">
+            <div class="badge-tag">TERMINAL PUNTO DE VENTA</div>
+            <h1 class="hero-title">Cobros Seguros<br>en Segundos.</h1>
+            <p class="hero-desc">Procesa pagos de tarjetas de crédito y débito con la más alta seguridad utilizando la infraestructura de Mercado Pago.</p>
           </div>
           
-          <div id="detail-badge" class="status-badge failed">Failed</div>
-          
-          <table class="details-table">
-            <tr>
-              <td>Referencia</td>
-              <td id="val-reference">payment-bf8cf7fff...</td>
-            </tr>
-            <tr>
-              <td>Preferencia</td>
-              <td>No aplica</td>
-            </tr>
-            <tr>
-              <td>Pago Terminal Punto de Venta</td>
-              <td id="val-id">171172885220</td>
-            </tr>
-            <tr>
-              <td>Estado proveedor</td>
-              <td id="val-status">rejected</td>
-            </tr>
-            <tr>
-              <td>Detalle rechazo</td>
-              <td id="val-detail">cc_rejected_high_risk</td>
-            </tr>
-            <tr>
-              <td>Método de pago</td>
-              <td id="val-method">debmaster</td>
-            </tr>
-            <tr>
-              <td>Tipo de pago</td>
-              <td id="val-type">debit_card</td>
-            </tr>
-          </table>
-        </div>
-        
-        <!-- Tarjeta Derecha (Actividad) -->
-        <div class="white-card flex-1">
-          <h3 class="activity-title">Actividad</h3>
-          
-          <div class="activity-item">
-            <div class="activity-info">
-              <p class="activity-name">payment_webhook</p>
-              <p class="activity-sub">Firma válida</p>
-            </div>
-            <div class="activity-time" id="val-date">
-              29/07/26, 11:30 p.m.
+          <!-- Columna Derecha -->
+          <div class="form-section">
+            <div class="glass-card">
+              <form id="details-form">
+                <div class="input-group">
+                  <label for="description">Descripción del Cobro</label>
+                  <input type="text" id="description" required placeholder="Ej. Pago de mensualidad">
+                </div>
+                
+                <div class="row">
+                  <div class="input-group flex-2">
+                    <label for="amount">Monto</label>
+                    <div class="amount-input-wrapper">
+                      <span class="currency-symbol">$</span>
+                      <input type="number" id="amount" required placeholder="0.00" min="1" step="0.01">
+                    </div>
+                  </div>
+                  <div class="input-group flex-1">
+                    <label for="currency">Moneda</label>
+                    <select id="currency" disabled>
+                      <option value="MXN">MXN</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <button type="submit" class="btn-primary glow-button">Procesar Pago ➔</button>
+              </form>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- PANTALLA 2: FORMULARIO DE PAGO Y DATOS DEL COMPRADOR -->
+      <div id="step-2-container" class="terminal-step">
+        <button type="button" id="btn-back-to-1" class="btn-back">← Volver al inicio</button>
+        
+        <div class="centered-layout">
+          <div class="glass-card lg-card">
+            <div class="payment-summary">
+              <div class="summary-info">
+                <span class="info-label">Resumen de cobro</span>
+                <h3 class="info-desc" id="display-desc">Descripción</h3>
+              </div>
+              <div class="summary-amount">
+                <span class="flag">🇲🇽</span> <span id="display-amount">$0.00</span>
+              </div>
+            </div>
+            
+            <hr class="divider">
+            
+            <p class="section-title">Datos de la tarjeta</p>
+            <div class="card-brands">
+              <span class="brand visa">VISA</span>
+              <span class="brand mc">MasterCard</span>
+              <span class="brand amex">AMEX</span>
+            </div>
+
+            <form id="checkout-form" class="checkout-form">
+              <div class="input-group">
+                <label>Número de tarjeta</label>
+                <div id="cardNumber" class="secure-field"></div>
+              </div>
+              
+              <div class="row">
+                <div class="input-group flex-1">
+                  <label>Vencimiento (MM/AA)</label>
+                  <div id="expirationDate" class="secure-field"></div>
+                </div>
+                <div class="input-group flex-1">
+                  <label>Código de seguridad (CVV)</label>
+                  <div id="securityCode" class="secure-field"></div>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="cardholderName">Nombre del titular</label>
+                <input type="text" id="cardholderName" required placeholder="Como aparece en la tarjeta">
+              </div>
+              
+              <div class="input-group">
+                <label for="payerEmail">E-mail de recibo</label>
+                <input type="email" id="payerEmail" required placeholder="ejemplo@email.com">
+              </div>
+
+              <button type="submit" id="btn-pay" class="btn-primary glow-button">
+                <span class="lock-icon">🔒</span> Pagar Seguro
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANTALLA 3: PAGO EN PROCESO -->
+      <div id="step-3-container" class="terminal-step">
+        <div class="centered-layout">
+          <div class="glass-card md-card text-center loading-card">
+            <div class="spinner"></div>
+            <h2 class="processing-title">Procesando pago...</h2>
+            <p class="processing-desc">Por favor, no cierres ni actualices esta ventana.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANTALLA 4: DETALLE DEL COBRO -->
+      <div id="step-4-container" class="terminal-step">
+        <button type="button" id="btn-back-to-1-from-4" class="btn-back">← Volver a inicio</button>
+        
+        <div class="details-layout">
+          <!-- Tarjeta Izquierda (Detalles) -->
+          <div class="glass-card flex-2">
+            <p class="info-label">RESULTADO DEL PAGO</p>
+            <h3 class="info-desc" id="detail-desc">Descripción</h3>
+            <div class="info-amount">
+              <span class="flag">🇲🇽</span> <span id="detail-amount">$0.00</span>
+            </div>
+            
+            <div id="detail-badge" class="status-badge failed">Failed</div>
+            
+            <table class="details-table">
+              <tr>
+                <td>Referencia MP</td>
+                <td id="val-reference">-</td>
+              </tr>
+              <tr>
+                <td>ID Transacción</td>
+                <td id="val-id">-</td>
+              </tr>
+              <tr>
+                <td>Estado</td>
+                <td id="val-status">-</td>
+              </tr>
+              <tr>
+                <td>Detalle de estado</td>
+                <td id="val-detail">-</td>
+              </tr>
+              <tr>
+                <td>Método</td>
+                <td id="val-method">-</td>
+              </tr>
+            </table>
+          </div>
+          
+          <!-- Tarjeta Derecha (Actividad) -->
+          <div class="glass-card flex-1">
+            <h3 class="activity-title">Actividad</h3>
+            
+            <div class="activity-timeline">
+              <div class="activity-item">
+                <div class="activity-dot"></div>
+                <div class="activity-info">
+                  <p class="activity-name">Intento de cobro</p>
+                  <p class="activity-time" id="val-date">--/--/---- --:--</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- End Client View -->
 
   </div>
   
