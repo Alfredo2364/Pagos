@@ -105,11 +105,12 @@ adminForm.addEventListener('submit', async (e) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ publicKey, accessToken })
     });
+    const data = await res.json().catch(() => ({}));
     if (res.ok) {
       alert('¡Credenciales actualizadas correctamente!');
       adminForm.reset();
     } else {
-      alert('Error al guardar credenciales.');
+      alert('Error al guardar credenciales. Detalles: ' + (data.details || data.error || data.message || res.statusText));
     }
   } catch (error) {
     alert('Error de conexión.');
