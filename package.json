@@ -4,5 +4,8 @@
   "description": "Terminal de Pagos con Vercel Serverless",
   "scripts": {
     "dev": "vercel dev"
+  },
+  "dependencies": {
+    "firebase": "^12.17.1"
   }
 }

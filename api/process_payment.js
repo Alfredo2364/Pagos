@@ -1,5 +1,7 @@
-import fs from 'fs';
-import path from 'path';
+import { db, doc, getDoc } from './db.js';
+
+const CONFIG_DOC_ID = 'mercado_pago';
+const COLLECTION_NAME = 'config';
 
 export default async function handler(req, res) {
   // Solo permitir POST
@@ -7,17 +9,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Método no permitido' });
   }
 
-  // Leer llaves
-  let ACCESS_TOKEN = '';
   try {
-    const keysData = fs.readFileSync(path.join(process.cwd(), 'api', 'keys.json'), 'utf8');
-    ACCESS_TOKEN = JSON.parse(keysData).accessToken;
-  } catch (error) {
-    console.error('Error reading keys:', error);
-    return res.status(500).json({ error: 'Error interno de configuración' });
-  }
+    // 1. Fetch access token from Firebase
+    const docRef = doc(db, COLLECTION_NAME, CONFIG_DOC_ID);
+    const docSnap = await getDoc(docRef);
+    
+    if (!docSnap.exists() || !docSnap.data().accessToken) {
+      return res.status(500).json({ error: 'Configuración de Mercado Pago no encontrada en Firebase' });
+    }
+    
+    const ACCESS_TOKEN = docSnap.data().accessToken;
 
-  try {
     const data = req.body;
 
     const paymentData = {

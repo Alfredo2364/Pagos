@@ -1,36 +1,43 @@
-import fs from 'fs';
-import path from 'path';
+import { db, doc, getDoc, setDoc } from './db.js';
 
-export default function handler(req, res) {
-  const filePath = path.join(process.cwd(), 'api', 'keys.json');
+const CONFIG_DOC_ID = 'mercado_pago';
+const COLLECTION_NAME = 'config';
+
+export default async function handler(req, res) {
+  const docRef = doc(db, COLLECTION_NAME, CONFIG_DOC_ID);
 
   if (req.method === 'GET') {
     try {
-      const fileData = fs.readFileSync(filePath, 'utf8');
-      const keys = JSON.parse(fileData);
-      // Only return the public key for the frontend
-      return res.status(200).json({ publicKey: keys.publicKey });
-    } catch (error) {
-      console.error('Error reading keys:', error);
-      return res.status(500).json({ error: 'Error reading configuration' });
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        res.status(200).json({ publicKey: data.publicKey || '' });
+      } else {
+        res.status(200).json({ publicKey: '' });
+      }
+    } catch (err) {
+      console.error("Error reading from Firestore:", err);
+      res.status(500).json({ error: 'Error interno del servidor' });
     }
-  }
-
-  if (req.method === 'POST') {
+  } 
+  else if (req.method === 'POST') {
     try {
       const { publicKey, accessToken } = req.body;
-      if (!publicKey || !accessToken) {
-        return res.status(400).json({ error: 'Faltan credenciales' });
-      }
+      
+      // Merge with existing data so we don't overwrite other fields if they exist
+      await setDoc(docRef, { 
+        publicKey, 
+        accessToken 
+      }, { merge: true });
 
-      const keys = { publicKey, accessToken };
-      fs.writeFileSync(filePath, JSON.stringify(keys, null, 2), 'utf8');
-      return res.status(200).json({ message: 'Keys updated successfully' });
+      res.status(200).json({ success: true, message: 'Keys guardadas en Firebase correctamente' });
     } catch (error) {
-      console.error('Error writing keys:', error);
-      return res.status(500).json({ error: 'Error saving configuration' });
+      console.error("Error writing to Firestore:", error);
+      res.status(500).json({ success: false, message: 'Error interno al guardar las keys' });
     }
+  } 
+  else {
+    res.setHeader('Allow', ['GET', 'POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-
-  return res.status(405).json({ error: 'Método no permitido' });
 }
