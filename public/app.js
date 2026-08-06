@@ -218,10 +218,14 @@ checkoutForm.addEventListener('submit', async (e) => {
   
   transactionData.cardholderName = document.getElementById('cardholderName').value;
   transactionData.payerEmail = document.getElementById('payerEmail').value;
+  transactionData.docType = document.getElementById('docType').value;
+  transactionData.docNumber = document.getElementById('docNumber').value;
 
   try {
     const tokenResponse = await mp.fields.createCardToken({
-      cardholderName: transactionData.cardholderName
+      cardholderName: transactionData.cardholderName,
+      identificationType: transactionData.docType,
+      identificationNumber: transactionData.docNumber
     });
 
     if (tokenResponse && tokenResponse.id) {
@@ -240,7 +244,11 @@ checkoutForm.addEventListener('submit', async (e) => {
       let payerObj = { 
         email: transactionData.payerEmail,
         first_name: firstName,
-        last_name: lastName
+        last_name: lastName,
+        identification: {
+          type: transactionData.docType,
+          number: transactionData.docNumber
+        }
       };
       
       let deviceId = typeof window.mpDeviceId === 'string' ? window.mpDeviceId : null;

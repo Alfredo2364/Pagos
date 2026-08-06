@@ -177,6 +177,22 @@
                 <input type="email" id="payerEmail" required placeholder="ejemplo@email.com">
               </div>
 
+              <div class="row">
+                <div class="input-group" style="flex: 1;">
+                  <label for="docType">Identificación</label>
+                  <select id="docType" required style="width: 100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white;">
+                    <option value="RFC">RFC</option>
+                    <option value="CURP">CURP</option>
+                    <option value="INE">INE</option>
+                    <option value="OTRO">Otro</option>
+                  </select>
+                </div>
+                <div class="input-group" style="flex: 2;">
+                  <label for="docNumber">Número de Identificación</label>
+                  <input type="text" id="docNumber" required placeholder="Ej. ABCD901231...">
+                </div>
+              </div>
+
               <button type="submit" id="btn-pay" class="btn-primary glow-button">
                 <span class="lock-icon">🔒</span> Pagar Seguro
               </button>
