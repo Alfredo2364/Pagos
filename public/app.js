@@ -73,7 +73,7 @@ loginForm.addEventListener('submit', async (e) => {
   const user = document.getElementById('username').value;
   const pass = document.getElementById('password').value;
 
-  if (user === 'admin' && pass === 'admin') {
+  if (user === 'eduardo' && pass === 'superloba5000') {
     userRoleBadge.textContent = 'SUPER ADMIN';
     userRoleBadge.style.backgroundColor = '#ef4444'; // Red
     switchMainView('admin-view');
