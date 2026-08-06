@@ -215,15 +215,22 @@ input:focus, select:focus {
   box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
 }
 .btn-back {
-  background: none; border: none;
+  background: rgba(255, 255, 255, 0.05); 
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-muted);
   cursor: pointer;
   font-size: 0.875rem;
   margin-bottom: 2rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 99px;
   display: inline-block;
-  transition: color 0.2s;
+  transition: all 0.2s ease;
 }
-.btn-back:hover { color: var(--text-main); }
+.btn-back:hover { 
+  color: var(--text-main); 
+  background: rgba(255, 255, 255, 0.1); 
+  transform: translateY(-2px);
+}
 
 /* Layout Utilities */
 .row { display: flex; gap: 1rem; }
