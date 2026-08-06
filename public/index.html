@@ -153,7 +153,10 @@
             <form id="checkout-form" class="checkout-form">
               <div class="input-group">
                 <label>Número de tarjeta</label>
-                <div id="cardNumber" class="secure-field"></div>
+                <div style="position: relative;">
+                  <div id="cardNumber" class="secure-field"></div>
+                  <img id="cardBrandIcon" src="" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); height: 24px; display: none; border-radius: 4px;" alt="Brand">
+                </div>
               </div>
               
               <div class="row">

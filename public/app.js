@@ -187,11 +187,23 @@ function initSecureFields() {
 
   cardNumberInstance.on('binChange', async (data) => {
     const { bin } = data;
+    const brandIcon = document.getElementById('cardBrandIcon');
+    
+    if (!bin) {
+      brandIcon.style.display = 'none';
+      window.paymentMethodId = null;
+      return;
+    }
+
     try {
-      if (bin) {
-        const { results } = await mp.getPaymentMethods({ bin });
-        if (!results || results.length === 0) return;
-        window.paymentMethodId = results[0]?.id;
+      const { results } = await mp.getPaymentMethods({ bin });
+      if (!results || results.length === 0) return;
+      
+      window.paymentMethodId = results[0]?.id;
+      
+      if (results[0].thumbnail) {
+        brandIcon.src = results[0].thumbnail;
+        brandIcon.style.display = 'block';
       }
     } catch (e) {
       console.error('Error getting payment method', e);
