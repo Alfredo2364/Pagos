@@ -183,16 +183,18 @@
               <div class="row">
                 <div class="input-group" style="flex: 1;">
                   <label for="docType">Identificación</label>
-                  <select id="docType" required style="width: 100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white;">
+                  <select id="docType" style="width: 100%; padding: 0.8rem; border-radius: 0.5rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white;">
+                    <option value="">Ninguno (Extranjero)</option>
                     <option value="RFC">RFC</option>
                     <option value="CURP">CURP</option>
                     <option value="INE">INE</option>
+                    <option value="PASSPORT">Pasaporte</option>
                     <option value="OTRO">Otro</option>
                   </select>
                 </div>
                 <div class="input-group" style="flex: 2;">
-                  <label for="docNumber">Número de Identificación</label>
-                  <input type="text" id="docNumber" required placeholder="Ej. ABCD901231...">
+                  <label for="docNumber">Número (Opcional)</label>
+                  <input type="text" id="docNumber" placeholder="Ej. ABCD901231...">
                 </div>
               </div>
 

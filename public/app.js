@@ -234,11 +234,16 @@ checkoutForm.addEventListener('submit', async (e) => {
   transactionData.docNumber = document.getElementById('docNumber').value;
 
   try {
-    const tokenResponse = await mp.fields.createCardToken({
-      cardholderName: transactionData.cardholderName,
-      identificationType: transactionData.docType,
-      identificationNumber: transactionData.docNumber
-    });
+    const tokenConfig = {
+      cardholderName: transactionData.cardholderName
+    };
+    
+    if (transactionData.docType && transactionData.docNumber) {
+      tokenConfig.identificationType = transactionData.docType;
+      tokenConfig.identificationNumber = transactionData.docNumber;
+    }
+    
+    const tokenResponse = await mp.fields.createCardToken(tokenConfig);
 
     if (tokenResponse && tokenResponse.id) {
       
@@ -256,12 +261,15 @@ checkoutForm.addEventListener('submit', async (e) => {
       let payerObj = { 
         email: transactionData.payerEmail,
         first_name: firstName,
-        last_name: lastName,
-        identification: {
+        last_name: lastName
+      };
+      
+      if (transactionData.docType && transactionData.docNumber) {
+        payerObj.identification = {
           type: transactionData.docType,
           number: transactionData.docNumber
-        }
-      };
+        };
+      }
       
       let deviceId = typeof window.mpDeviceId === 'string' ? window.mpDeviceId : null;
       console.log('Device ID from MP Security:', deviceId);
