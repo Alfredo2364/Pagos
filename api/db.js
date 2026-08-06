@@ -1,9 +1,10 @@
-import admin from 'firebase-admin';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
 let initError = null;
+let db = null;
 
-// Protect against multiple initializations in Serverless environments
-if (!admin.apps.length) {
+if (getApps().length === 0) {
   try {
     if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
       throw new Error("La variable FIREBASE_SERVICE_ACCOUNT no existe. Asegúrate de hacer el Redeploy en Vercel.");
@@ -16,8 +17,8 @@ if (!admin.apps.length) {
       throw new Error("El JSON de FIREBASE_SERVICE_ACCOUNT es inválido o se copió mal.");
     }
 
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
+    initializeApp({
+      credential: cert(serviceAccount)
     });
     console.log('Firebase Admin SDK initialized successfully.');
   } catch (error) {
@@ -26,10 +27,9 @@ if (!admin.apps.length) {
   }
 }
 
-let db = null;
 if (!initError) {
   try {
-    db = admin.firestore();
+    db = getFirestore();
   } catch (e) {
     initError = e;
   }
