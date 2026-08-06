@@ -1,5 +1,5 @@
 // 1. Inicializar Mercado Pago
-const mp = new MercadoPago('PUBLIC_KEY_AQUI', {
+const mp = new MercadoPago('APP_USR-bdf13914-b6bc-4759-859d-4a76f79b1e4c', {
   locale: 'es-MX'
 });
 

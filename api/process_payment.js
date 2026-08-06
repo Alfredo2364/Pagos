@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   }
 
   // Las llaves de Producción (APP_USR-...)
-  const ACCESS_TOKEN = "ACCESS_TOKEN_AQUI";
+  const ACCESS_TOKEN = "APP_USR-16428924137717-073114-4eadb7b2105102a5d20cc7a9787bda73-730654234";
 
   try {
     const data = req.body;
