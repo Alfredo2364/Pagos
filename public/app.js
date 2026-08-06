@@ -221,9 +221,7 @@ checkoutForm.addEventListener('submit', async (e) => {
 
   try {
     const tokenResponse = await mp.fields.createCardToken({
-      cardholderName: transactionData.cardholderName,
-      identificationType: 'OTRO',
-      identificationNumber: '12345678'
+      cardholderName: transactionData.cardholderName
     });
 
     if (tokenResponse && tokenResponse.id) {
@@ -235,8 +233,18 @@ checkoutForm.addEventListener('submit', async (e) => {
         else if (firstDigit === '3') window.paymentMethodId = 'amex';
       }
 
-      let payerObj = { email: transactionData.payerEmail };
+      const nameParts = transactionData.cardholderName.trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+
+      let payerObj = { 
+        email: transactionData.payerEmail,
+        first_name: firstName,
+        last_name: lastName
+      };
+      
       let deviceId = typeof window.mpDeviceId === 'string' ? window.mpDeviceId : null;
+      console.log('Device ID from MP Security:', deviceId);
 
       const payload = {
         token: tokenResponse.id,
