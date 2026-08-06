@@ -1,4 +1,4 @@
-import { db, doc, getDoc } from './db.js';
+import { db } from './db.js';
 
 const CONFIG_DOC_ID = 'mercado_pago';
 const COLLECTION_NAME = 'config';
@@ -10,11 +10,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 1. Fetch access token from Firebase
-    const docRef = doc(db, COLLECTION_NAME, CONFIG_DOC_ID);
-    const docSnap = await getDoc(docRef);
+    // 1. Fetch access token from Firebase Admin
+    const docRef = db.collection(COLLECTION_NAME).doc(CONFIG_DOC_ID);
+    const docSnap = await docRef.get();
     
-    if (!docSnap.exists() || !docSnap.data().accessToken) {
+    if (!docSnap.exists || !docSnap.data().accessToken) {
       return res.status(500).json({ error: 'Configuración de Mercado Pago no encontrada en Firebase' });
     }
     

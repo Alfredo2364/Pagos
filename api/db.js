@@ -1,17 +1,18 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import admin from 'firebase-admin';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCQqqvpWmSnFMqCM6fmOvxzKnWJDtZgmwY",
-  authDomain: "login-form-5d3c6.firebaseapp.com",
-  projectId: "login-form-5d3c6",
-  storageBucket: "login-form-5d3c6.firebasestorage.app",
-  messagingSenderId: "507225046341",
-  appId: "1:507225046341:web:d95b223cc3dbbe464f122c",
-  measurementId: "G-DBEFWS4DS3"
-};
+// Protect against multiple initializations in Serverless environments
+if (!admin.apps.length) {
+  try {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
+    console.log('Firebase Admin SDK initialized successfully.');
+  } catch (error) {
+    console.error('Firebase Admin init error (check FIREBASE_SERVICE_ACCOUNT env var):', error.stack);
+  }
+}
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = admin.firestore();
 
-export { db, doc, getDoc, setDoc };
+export { db };
