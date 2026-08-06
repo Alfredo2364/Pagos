@@ -22,21 +22,32 @@ const step4 = document.getElementById('step-4-container');
 // Forms & Buttons
 const loginForm = document.getElementById('login-form');
 const btnLogout = document.getElementById('btn-logout');
+const btnLoginTrigger = document.getElementById('btn-login-trigger');
+const btnCancelLogin = document.getElementById('btn-cancel-login');
 const adminForm = document.getElementById('admin-form');
 
 const detailsForm = document.getElementById('details-form');
 const checkoutForm = document.getElementById('checkout-form');
 const btnPay = document.getElementById('btn-pay');
 
+// Initialization
+document.addEventListener('DOMContentLoaded', () => {
+  initTerminal();
+});
+
 // Navigation
 function switchMainView(viewId) {
   [loginView, adminView, clientView].forEach(v => v.classList.remove('active'));
   document.getElementById(viewId).classList.add('active');
   
-  if (viewId === 'login-view') {
-    mainHeader.style.display = 'none';
-  } else {
-    mainHeader.style.display = 'block';
+  if (viewId === 'login-view' || viewId === 'client-view') {
+    btnLoginTrigger.style.display = viewId === 'client-view' ? 'block' : 'none';
+    btnLogout.style.display = 'none';
+    userRoleBadge.style.display = 'none';
+  } else if (viewId === 'admin-view') {
+    btnLoginTrigger.style.display = 'none';
+    btnLogout.style.display = 'block';
+    userRoleBadge.style.display = 'inline-block';
   }
 }
 
@@ -48,6 +59,15 @@ function switchTerminalStep(stepId) {
 // ==========================================
 // LÓGICA DE LOGIN Y SESIÓN
 // ==========================================
+btnLoginTrigger.addEventListener('click', (e) => {
+  e.preventDefault();
+  switchMainView('login-view');
+});
+
+btnCancelLogin.addEventListener('click', () => {
+  switchMainView('client-view');
+});
+
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const user = document.getElementById('username').value;
@@ -57,21 +77,15 @@ loginForm.addEventListener('submit', async (e) => {
     userRoleBadge.textContent = 'SUPER ADMIN';
     userRoleBadge.style.backgroundColor = '#ef4444'; // Red
     switchMainView('admin-view');
-  } else if (user === 'cliente' && pass === '1234') {
-    userRoleBadge.textContent = 'CLIENTE';
-    userRoleBadge.style.backgroundColor = '#10b981'; // Green
-    
-    // Cargar clave pública antes de entrar a la terminal
-    await initTerminal();
   } else {
-    alert('Credenciales incorrectas. (Pista: cliente/1234 o admin/admin)');
+    alert('Credenciales incorrectas.');
   }
 });
 
 btnLogout.addEventListener('click', (e) => {
   e.preventDefault();
   loginForm.reset();
-  switchMainView('login-view');
+  switchMainView('client-view');
 });
 
 // ==========================================

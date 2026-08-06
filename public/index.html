@@ -14,12 +14,13 @@
 <body>
   
   <!-- Encabezado Morado / Premium -->
-  <header class="navbar" id="main-header" style="display: none;">
+  <header class="navbar" id="main-header">
     <div class="nav-content">
       <div class="nav-logo">Terminal <span class="highlight">Virtual</span></div>
       <div class="nav-links">
-        <span id="user-role-badge" class="badge">Role</span>
-        <a href="#" id="btn-logout" class="nav-link logout-link">Cerrar Sesión</a>
+        <span id="user-role-badge" class="badge" style="display: none;">Role</span>
+        <a href="#" id="btn-login-trigger" class="nav-link">🔒 Acceso Admin</a>
+        <a href="#" id="btn-logout" class="nav-link logout-link" style="display: none;">Cerrar Sesión</a>
       </div>
     </div>
   </header>
@@ -27,28 +28,26 @@
   <div class="app-container" id="app-container">
 
     <!-- ==================== LOGIN VIEW ==================== -->
-    <div id="login-view" class="view-container active">
+    <div id="login-view" class="view-container">
       <div class="login-wrapper">
         <div class="glass-card login-card">
           <div class="logo-area">
             <div class="logo-icon"></div>
-            <h2>Bienvenido</h2>
-            <p>Ingresa tus credenciales para continuar</p>
+            <h2>Acceso Restringido</h2>
+            <p>Ingresa tus credenciales de administrador</p>
           </div>
           <form id="login-form">
             <div class="input-group">
               <label for="username">Usuario</label>
-              <input type="text" id="username" required placeholder="cliente / admin">
+              <input type="text" id="username" required placeholder="admin">
             </div>
             <div class="input-group">
               <label for="password">Contraseña</label>
               <input type="password" id="password" required placeholder="••••••••">
             </div>
-            <button type="submit" class="btn-primary glow-button">Iniciar Sesión</button>
+            <button type="submit" class="btn-primary glow-button">Ingresar al Panel</button>
+            <button type="button" id="btn-cancel-login" class="btn-back" style="margin-top: 1.5rem; margin-bottom: 0;">← Volver a la Terminal</button>
           </form>
-          <div class="login-hints">
-            <small>Hint: cliente/1234 | admin/admin</small>
-          </div>
         </div>
       </div>
     </div>
@@ -79,7 +78,7 @@
     </div>
 
     <!-- ==================== CLIENT VIEWS (TERMINAL) ==================== -->
-    <div id="client-view" class="view-container">
+    <div id="client-view" class="view-container active">
       
       <!-- PANTALLA 1: INICIO -->
       <div id="step-1-container" class="terminal-step active">
