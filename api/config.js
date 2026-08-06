@@ -30,8 +30,8 @@ export default async function handler(req, res) {
       
       // Merge with existing data so we don't overwrite other fields if they exist
       await docRef.set({ 
-        publicKey, 
-        accessToken 
+        publicKey: (publicKey || '').trim(), 
+        accessToken: (accessToken || '').trim() 
       }, { merge: true });
 
       res.status(200).json({ success: true, message: 'Keys guardadas seguras en Firebase' });
