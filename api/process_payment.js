@@ -14,15 +14,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 1. Fetch access token from Firebase Admin
-    const docRef = db.collection(COLLECTION_NAME).doc(CONFIG_DOC_ID);
-    const docSnap = await docRef.get();
-    
-    if (!docSnap.exists || !docSnap.data().accessToken) {
-      return res.status(500).json({ error: 'Configuración de Mercado Pago no encontrada en Firebase' });
+    const { data: configData, error: configError } = await db
+      .from('mercado_pago_config')
+      .select('access_token')
+      .eq('id', 'default')
+      .single();
+      
+    if (configError || !configData?.access_token) {
+      return res.status(500).json({ error: 'Configuración de Mercado Pago no encontrada en Supabase' });
     }
     
-    const ACCESS_TOKEN = docSnap.data().accessToken;
+    const ACCESS_TOKEN = configData.access_token;
 
     const data = req.body;
 

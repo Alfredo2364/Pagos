@@ -1,38 +1,23 @@
-import { initializeApp, getApps, cert } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import { createClient } from '@supabase/supabase-js';
 
-let initError = null;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
 let db = null;
+let initError = null;
 
-if (getApps().length === 0) {
-  try {
-    if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
-      throw new Error("La variable FIREBASE_SERVICE_ACCOUNT no existe. Asegúrate de hacer el Redeploy en Vercel.");
-    }
-    
-    let serviceAccount;
-    try {
-      serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-    } catch (e) {
-      throw new Error("El JSON de FIREBASE_SERVICE_ACCOUNT es inválido o se copió mal.");
-    }
-
-    initializeApp({
-      credential: cert(serviceAccount)
-    });
-    console.log('Firebase Admin SDK initialized successfully.');
-  } catch (error) {
-    console.error('Firebase Admin init error:', error.stack);
-    initError = error;
+try {
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Faltan las variables SUPABASE_URL o SUPABASE_SERVICE_ROLE_KEY. Configúralas en Vercel.");
   }
-}
-
-if (!initError) {
-  try {
-    db = getFirestore();
-  } catch (e) {
-    initError = e;
-  }
+  
+  // Usamos el SERVICE_ROLE_KEY para poder acceder y modificar la tabla de configuración 
+  // incluso si tiene Row Level Security (RLS) bloqueada para el público.
+  db = createClient(supabaseUrl, supabaseKey);
+  console.log('Supabase client initialized successfully.');
+} catch (error) {
+  console.error('Supabase init error:', error.stack || error);
+  initError = error;
 }
 
 export { db, initError };
