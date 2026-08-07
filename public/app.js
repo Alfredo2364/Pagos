@@ -37,14 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Navigation
 function switchMainView(viewId) {
-  [loginView, adminView, clientView].forEach(v => v.classList.remove('active'));
+  const views = ['login-view', 'admin-view', 'client-view', 'history-view'];
+  views.forEach(v => {
+    const el = document.getElementById(v);
+    if (el) el.classList.remove('active');
+  });
   document.getElementById(viewId).classList.add('active');
   
   if (viewId === 'login-view' || viewId === 'client-view') {
     btnLoginTrigger.style.display = viewId === 'client-view' ? 'block' : 'none';
     btnLogout.style.display = 'none';
     userRoleBadge.style.display = 'none';
-  } else if (viewId === 'admin-view') {
+    userRoleBadge.style.display = 'none';
+  } else if (viewId === 'admin-view' || viewId === 'history-view') {
     btnLoginTrigger.style.display = 'none';
     btnLogout.style.display = 'block';
     userRoleBadge.style.display = 'inline-block';
@@ -77,6 +82,11 @@ loginForm.addEventListener('submit', async (e) => {
     userRoleBadge.textContent = 'SUPER ADMIN';
     userRoleBadge.style.backgroundColor = '#ef4444'; // Red
     switchMainView('admin-view');
+  } else if (user === 'aldo' && pass === 'marshall25') {
+    userRoleBadge.textContent = 'PROGRAMADOR';
+    userRoleBadge.style.backgroundColor = '#3b82f6'; // Blue
+    switchMainView('history-view');
+    loadHistory();
   } else {
     alert('Credenciales incorrectas.');
   }
@@ -140,6 +150,53 @@ async function initTerminal() {
     }
   } catch (error) {
     console.error('Error loading config', error);
+  }
+}
+
+// ==========================================
+// LÓGICA DEL HISTORIAL
+// ==========================================
+
+const btnRefreshHistory = document.getElementById('btn-refresh-history');
+if (btnRefreshHistory) {
+  btnRefreshHistory.addEventListener('click', loadHistory);
+}
+
+async function loadHistory() {
+  const tbody = document.getElementById('history-table-body');
+  if (!tbody) return;
+  
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem;">Cargando historial...</td></tr>';
+  
+  try {
+    const res = await fetch('/api/history');
+    if (!res.ok) throw new Error('Error al cargar historial');
+    
+    const data = await res.json();
+    if (!data.history || data.history.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: #9ca3af;">No hay transacciones registradas.</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = data.history.map(row => {
+      const date = new Date(row.fecha).toLocaleString('es-MX');
+      let statusColor = '#9ca3af'; // gray
+      if (row.estatus === 'approved' || row.estatus === 'aprobado') statusColor = '#10b981'; // green
+      if (row.estatus === 'rejected' || row.estatus === 'rechazado') statusColor = '#ef4444'; // red
+      
+      return `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+          <td style="padding: 1rem;">${row.referencia_externa}</td>
+          <td style="padding: 1rem; font-weight: bold;">$${row.monto}</td>
+          <td style="padding: 1rem;"><span style="color: ${statusColor}; border: 1px solid ${statusColor}; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; text-transform: uppercase;">${row.estatus}</span></td>
+          <td style="padding: 1rem; font-size: 0.9rem; color: #9ca3af;">${date}</td>
+        </tr>
+      `;
+    }).join('');
+    
+  } catch (error) {
+    console.error(error);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: #ef4444;">Error de conexión. Intenta de nuevo.</td></tr>';
   }
 }
 

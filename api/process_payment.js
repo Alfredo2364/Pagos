@@ -28,13 +28,18 @@ export default async function handler(req, res) {
 
     const data = req.body;
 
+    const extRef = 'FOLIO-' + Date.now();
+    const webhookUrl = `https://${req.headers.host || 'pagos-rho.vercel.app'}/api/webhook`;
+
     const paymentData = {
       transaction_amount: Number(data.transaction_amount),
       description: data.description,
       payment_method_id: data.payment_method_id,
       token: data.token,
       installments: Number(data.installments),
-      payer: data.payer // Pasamos el objeto entero (con todo y address, si existe)
+      payer: data.payer, // Pasamos el objeto entero (con todo y address, si existe)
+      external_reference: extRef,
+      notification_url: webhookUrl
     };
 
     const idempotencyKey = Date.now().toString() + Math.random().toString(36).substring(7);
@@ -57,6 +62,18 @@ export default async function handler(req, res) {
     });
 
     const mpData = await mpResponse.json();
+
+    // Guardar en el historial (solo si MP nos dio un ID o estatus)
+    if (mpData.id || mpData.status) {
+      await db.from('historial_pagos').insert({
+        referencia_externa: extRef,
+        payment_id: mpData.id || null,
+        monto: Number(data.transaction_amount),
+        estatus: mpData.status || 'error',
+        detalle_estatus: mpData.status_detail || 'unknown',
+        descripcion: data.description
+      });
+    }
 
     return res.status(mpResponse.status).json(mpData);
 

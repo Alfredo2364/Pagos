@@ -80,6 +80,38 @@
       </div>
     </div>
 
+    <!-- ==================== HISTORY VIEW ==================== -->
+    <div id="history-view" class="view-container">
+      <div class="centered-layout" style="max-width: 900px; margin: 0 auto; width: 100%;">
+        <div class="glass-card lg-card">
+          <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h3><span class="icon">📊</span> Historial de Pagos</h3>
+              <p>Visualiza todas las transacciones procesadas</p>
+            </div>
+            <button id="btn-refresh-history" class="btn-secondary" style="padding: 0.5rem 1rem;">Actualizar</button>
+          </div>
+          <hr class="divider">
+          
+          <div style="overflow-x: auto; margin-top: 1rem;">
+            <table class="history-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+              <thead>
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                  <th style="padding: 1rem; color: rgba(255,255,255,0.6);">Folio</th>
+                  <th style="padding: 1rem; color: rgba(255,255,255,0.6);">Monto</th>
+                  <th style="padding: 1rem; color: rgba(255,255,255,0.6);">Estatus</th>
+                  <th style="padding: 1rem; color: rgba(255,255,255,0.6);">Fecha</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <tr><td colspan="4" style="text-align: center; padding: 2rem;">Cargando historial...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ==================== CLIENT VIEWS (TERMINAL) ==================== -->
     <div id="client-view" class="view-container active">
       
