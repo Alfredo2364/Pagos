@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       .from('historial_pagos')
       .select('*')
       .order('fecha', { ascending: false })
-      .limit(100);
+      .limit(1000);
 
     if (error) throw error;
 

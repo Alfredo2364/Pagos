@@ -65,14 +65,17 @@ export default async function handler(req, res) {
 
     // Guardar en el historial (solo si MP nos dio un ID o estatus)
     if (mpData.id || mpData.status) {
-      await db.from('historial_pagos').insert({
+      const { error: insertError } = await db.from('historial_pagos').insert({
         referencia_externa: extRef,
         payment_id: mpData.id || null,
-        monto: Number(data.transaction_amount),
+        monto: Number(data.transaction_amount) || 0,
         estatus: mpData.status || 'error',
         detalle_estatus: mpData.status_detail || 'unknown',
-        descripcion: data.description
+        descripcion: data.description || ''
       });
+      if (insertError) {
+        console.error("Supabase insert error en historial_pagos:", insertError);
+      }
     }
 
     return res.status(mpResponse.status).json(mpData);
