@@ -75,8 +75,8 @@ btnCancelLogin.addEventListener('click', () => {
 
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const user = document.getElementById('username').value;
-  const pass = document.getElementById('password').value;
+  const user = document.getElementById('username').value.trim().toLowerCase();
+  const pass = document.getElementById('password').value.trim();
 
   if (user === 'eduardo' && pass === 'superloba5000') {
     userRoleBadge.textContent = 'SUPER ADMIN';
