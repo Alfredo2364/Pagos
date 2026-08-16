@@ -231,7 +231,7 @@ document.getElementById('btn-back-to-1-from-4').addEventListener('click', () => 
 // Secure Fields
 function initSecureFields() {
   const customStyles = {
-    color: '#f8fafc',
+    color: '#111827',
     placeholderColor: '#9ca3af',
     fontSize: '16px',
     fontFamily: 'Inter, sans-serif'
